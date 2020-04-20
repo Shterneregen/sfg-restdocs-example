@@ -4,6 +4,7 @@ plugins {
     id "org.asciidoctor.convert" version "1.5.8"
     id "java"
     id "net.ltgt.apt" version "0.20"
+    id 'idea'
 }
 apply plugin: "net.ltgt.apt-idea"
 
@@ -24,6 +25,7 @@ configurations {
 repositories {
     mavenLocal()
     mavenCentral()
+    jcenter()
 }
 
 ext {
@@ -41,7 +43,7 @@ dependencies {
             "org.mapstruct:mapstruct:$mapstructVersion",
             "javax.xml.bind:jaxb-api:$jaxbVersion",
             "com.sun.xml.bind:jaxb-core:$jaxbVersion",
-            "com.sun.xml.bind:jaxb-impl:$jaxbVersion",
+            "com.sun.xml.bind:jaxb-impl:$jaxbVersion"
     )
     compileOnly "org.projectlombok:lombok"
     developmentOnly "org.springframework.boot:spring-boot-devtools"
@@ -56,22 +58,15 @@ dependencies {
     }
     testCompile(
             "org.mockito:mockito-junit-jupiter:3.3.3",
-            "org.junit.jupiter:junit-jupiter-api:$jupiterVersion",
-            "org.junit.jupiter:junit-jupiter-engine:$jupiterVersion"
     )
     testImplementation "org.springframework.restdocs:spring-restdocs-mockmvc"
     testAnnotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
+    testRuntime "org.junit.jupiter:junit-jupiter:$jupiterVersion"
 }
 
 test {
     outputs.dir snippetsDir
     useJUnitPlatform()
-}
-
-tasks.withType(JavaCompile) {
-    options.compilerArgs = [
-            "-Amapstruct.suppressGeneratorTimestamp=true"
-    ]
 }
 
 asciidoctor {
