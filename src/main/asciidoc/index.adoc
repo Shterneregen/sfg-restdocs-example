@@ -30,3 +30,9 @@ include::{snippets}/v1/beer/request-body.adoc[]
 
 Response Body:
 include::{snippets}/v1/beer/response-body.adoc[]
+
+Request fields:
+include::{snippets}/v1/beer/request-fields.adoc[]
+
+Response fields:
+include::{snippets}/v1/beer/response-fields.adoc[]
