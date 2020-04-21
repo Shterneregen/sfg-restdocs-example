@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @ExtendWith(RestDocumentationExtension.class)
-@AutoConfigureRestDocs
+@AutoConfigureRestDocs(uriScheme = "https", uriHost = "shterneregen.online", uriPort = 443)
 @WebMvcTest(BeerController.class)
 @ComponentScan(basePackages = "random.sfgrestdocsexample.web.mappers")
 public class BeerControllerTest {
