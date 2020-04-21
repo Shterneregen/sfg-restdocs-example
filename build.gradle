@@ -1,12 +1,16 @@
 plugins {
     id "org.springframework.boot" version "2.2.6.RELEASE"
     id "io.spring.dependency-management" version "1.0.9.RELEASE"
-    id "org.asciidoctor.convert" version "1.5.8"
+//    id "org.asciidoctor.convert" version "2.4.0"
     id "java"
     id "net.ltgt.apt" version "0.20"
     id 'idea'
+
+    id 'org.asciidoctor.jvm.base' version '3.2.0'
+    id 'org.asciidoctor.jvm.convert' version '3.2.0'
 }
 apply plugin: "net.ltgt.apt-idea"
+//apply plugin: 'org.asciidoctor.convert'
 
 group = "random"
 version = "0.0.1-SNAPSHOT"
@@ -36,7 +40,6 @@ ext {
 }
 
 dependencies {
-    asciidoctor "org.springframework.restdocs:spring-restdocs-asciidoctor"
     implementation(
             "org.springframework.boot:spring-boot-starter-data-jpa",
             "org.springframework.boot:spring-boot-starter-web",
@@ -58,10 +61,14 @@ dependencies {
     }
     testCompile(
             "org.mockito:mockito-junit-jupiter:3.3.3",
+            "org.asciidoctor:asciidoctor-gradle-plugin:1.6.0",
+            "org.springframework.restdocs:spring-restdocs-mockmvc",
     )
     testImplementation "org.springframework.restdocs:spring-restdocs-mockmvc"
     testAnnotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
     testRuntime "org.junit.jupiter:junit-jupiter:$jupiterVersion"
+
+//    asciidoctor "org.springframework.restdocs:spring-restdocs-asciidoctor:2.2.6.RELEASE"
 }
 
 test {
@@ -70,6 +77,16 @@ test {
 }
 
 asciidoctor {
+    println ("asciidoctor task")
     inputs.dir snippetsDir
     dependsOn test
+    sourceDir  file('src/asciidoc')
+//    outputDir  file('build/docs')
+}
+
+bootJar {
+    dependsOn asciidoctor
+    from("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
+    }
 }
