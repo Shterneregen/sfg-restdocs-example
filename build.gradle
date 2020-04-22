@@ -1,16 +1,11 @@
 plugins {
+    id "java"
+    id 'idea'
     id "org.springframework.boot" version "2.2.6.RELEASE"
     id "io.spring.dependency-management" version "1.0.9.RELEASE"
-//    id "org.asciidoctor.convert" version "2.4.0"
-    id "java"
+    id "org.asciidoctor.convert" version "2.4.0"
     id "net.ltgt.apt" version "0.20"
-    id 'idea'
-
-    id 'org.asciidoctor.jvm.base' version '3.2.0'
-    id 'org.asciidoctor.jvm.convert' version '3.2.0'
 }
-apply plugin: "net.ltgt.apt-idea"
-//apply plugin: 'org.asciidoctor.convert'
 
 group = "random"
 version = "0.0.1-SNAPSHOT"
@@ -59,16 +54,12 @@ dependencies {
         exclude group: "org.junit.vintage", module: "junit-vintage-engine"
         exclude group: "junit", module: "junit"
     }
-    testCompile(
+    testImplementation(
             "org.mockito:mockito-junit-jupiter:3.3.3",
-            "org.asciidoctor:asciidoctor-gradle-plugin:1.6.0",
             "org.springframework.restdocs:spring-restdocs-mockmvc",
     )
-    testImplementation "org.springframework.restdocs:spring-restdocs-mockmvc"
     testAnnotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
     testRuntime "org.junit.jupiter:junit-jupiter:$jupiterVersion"
-
-//    asciidoctor "org.springframework.restdocs:spring-restdocs-asciidoctor:2.2.6.RELEASE"
 }
 
 test {
@@ -77,11 +68,34 @@ test {
 }
 
 asciidoctor {
-    println ("asciidoctor task")
-    inputs.dir snippetsDir
+    println("asciidoctor task")
     dependsOn test
-    sourceDir  file('src/asciidoc')
-//    outputDir  file('build/docs')
+    sourceDir file('src/main/asciidoc')
+    outputDir "build/asciidoc"
+    inputs.dir snippetsDir
+    backends = ['html5']
+    options doctype: 'book'
+
+    attributes = [
+            'source-highlighter': 'highlightjs',
+            'imagesdir'         : './images',
+            'toc'               : 'left',
+            'toclevels'         : 3,
+            'numbered'          : '',
+            'icons'             : 'font',
+            'setanchors'        : '',
+            'idprefix'          : '',
+            'idseparator'       : '-',
+            'docinfo1'          : '',
+            'safe-mode-unsafe'  : '',
+            'allow-uri-read'    : '',
+            'snippets'          : snippetsDir,
+            linkattrs           : true,
+            encoding            : 'utf-8'
+    ]
+    sources {
+        include 'index.adoc' //, 'etc/internal.adoc'
+    }
 }
 
 bootJar {
