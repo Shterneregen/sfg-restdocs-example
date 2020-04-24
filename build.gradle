@@ -104,3 +104,11 @@ bootJar {
         into 'static/docs'
     }
 }
+
+task copyDocs(type: Copy) {
+    println("copyDocs task")
+    from "$buildDir/asciidoc/html5"
+    into "$buildDir/classes/static/docs"
+}
+
+build.finalizedBy(copyDocs)
